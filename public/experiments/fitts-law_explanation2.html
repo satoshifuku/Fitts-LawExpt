@@ -1,0 +1,48 @@
+<html>
+<head>
+    <link rel="stylesheet" href="../lib/bootstrap-4.3.1-dist/css/bootstrap.min.css" />
+</head>
+<body>
+<div class="container" >
+    <div class="row">
+        <div class="col-12 pt-3 pb-3" >
+            <h1>
+                Explanation of "Fitts's law experiment" <br />
+                「フィッツの法則の実験」についての説明
+            </h1>
+
+            <ul  class="nav nav-tabs">
+                <li class="nav-item"><a class="nav-link" href="#japanese" onclick="document.getElementById('japanese').style.display='block';document.getElementById('english').style.display='none';" >
+                    日本語</a></li>
+                <li class="nav-item"><a class="nav-link" href="#english"  onclick="document.getElementById('japanese').style.display='none';document.getElementById('english').style.display='block';"
+                >English</a></li>
+            </ul>
+            <div id="japanese" class="text-left pt-3">
+                <p>
+                    これで練習は終わりです。
+                </p>
+                <p>
+                    下のボタンを押すと、本番が始まります。
+                </p>
+
+              
+
+            </div>
+            <div id="english" style="display:none;" class="text-left pt-3">
+                <p>
+                    The practice trial is finished.
+                </p>            
+                <p>
+                    Press the button below to start the experiment.
+                </p>
+               
+            </div>
+            <button type="button" id="next-button" class="btn btn-primary">Go to the experiment/本番を始める</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="../lib/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+</body>
+</html>

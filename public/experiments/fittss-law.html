@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../jsPsych/css/jspsych.css" />
+    <link rel="stylesheet" href="../lib/server-link.css" />
+</head>
+
+<body>
+
+<!-- Firebase settings  -->
+<script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.3.1//firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.3.1//firebase-firestore.js"></script>
+
+<!-- jsPsych settings  -->
+<script src="../jsPsych/jspsych.js"></script>
+<script src="../jsPsych/plugins/jspsych-external-html.js"></script>
+<script src="jspsych-fittss-law.js"></script>
+
+<!-- This app settings  -->
+<script src="../lib/server-link.js"></script>
+
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        ServerLink.init();
+
+
+        /* 
+        メインのタスクを作る
+        */
+        // メインタスクのパラメータ
+        const parameters = [];
+        const n_param  = 10
+        for(var i = 0; i < n_param; i++){
+            parameters.push({width: 20 * Math.random() + 10, 
+                             distance: 180 * Math.random() + 20, 
+                             theta: 2 * Math.PI * Math.random()})
+        }
+
+        parameters.push()
+        const mainTimeline = [];
+        const mainPrompt = "マウスカーソルを円の中心に動かして下さい<br/>Move the cursor to the center of the circle";
+        const postTaskPrompt = "マウスカーソルを画面中央に戻して下さい<br/>Go back the cursor to the center";
+        const createMainPart = (w, d, t) => {
+            return {
+                timeline: [
+                    {
+                        type: 'fittss-law',
+                        width: w,
+                        distance: d,
+                        theta: t,
+                        color: "blue",
+                        prompt: mainPrompt
+
+                    },
+                    { // 1回中央に戻す
+                        type: 'fittss-law',
+                        width: 20,
+                        distance: 0,
+                        theta: 0,
+                        tag: "post-task-center",
+                        prompt: postTaskPrompt
+                    }
+                ],
+                randomize_order: false,
+                repetitions: 1
+            }
+        } 
+
+        parameters.forEach((param) => {
+            mainTimeline.push(createMainPart(param.width, param.distance, param.theta))
+        })
+
+        // 順番をランダムに(jsPsychのrandamizeオプションが動かないため)
+        for(var i = mainTimeline.length - 1; i > 0; i--){
+            var r = Math.floor(Math.random() * (i + 1));
+            var tmp = mainTimeline[i];
+            mainTimeline[i] = mainTimeline[r];
+            mainTimeline[r] = tmp;
+        }
+
+        const timelines = [
+            {
+                timeline: [
+                    // 同意
+                    {
+                        type: "external-html",
+                        url: "./fitts-law_agreement.html",
+                        cont_btn: "next-button"
+                    },
+                    // 説明                   
+                    {
+                        type: "external-html",
+                        url: "./fitts-law_explanation.html",
+                        cont_btn: "next-button"
+                    },
+                    // 練習試行
+                    { 
+                        type: 'fittss-law',
+                        width: 20,
+                        distance: 0,
+                        theta: 0,
+                        tag: "trial-task-center",
+                        prompt: postTaskPrompt
+                    },
+                    { 
+                        type: 'fittss-law',
+                        width: 30,
+                        distance: 100,
+                        theta: 2 * Math.PI * Math.random(),
+                        tag: "trial-task-center",
+                        color: "blue",
+                        prompt: mainPrompt
+                    },
+                    { 
+                        type: 'fittss-law',
+                        width: 20,
+                        distance: 0,
+                        theta: 0,
+                        tag: "trial-task-center",
+                        prompt: postTaskPrompt
+                    },
+                    { 
+                        type: 'fittss-law',
+                        width: 10,
+                        distance: 120,
+                        theta: 2 * Math.PI * Math.random(),
+                        tag: "trial-task-center",
+                        color: "blue",
+                        prompt: mainPrompt
+                    },
+                    { 
+                        type: 'fittss-law',
+                        width: 20,
+                        distance: 0,
+                        theta: 0,
+                        tag: "trial-task-center",
+                        prompt: postTaskPrompt
+                    },
+
+                    // 本番前メッセージ
+                    {
+                        type: "external-html",
+                        url: "./fitts-law_explanation2.html",
+                        cont_btn: "next-button"
+                    },
+                    // 1回中央に戻す
+                    { 
+                        type: 'fittss-law',
+                        width: 20,
+                        distance: 0,
+                        theta: 0,
+                        tag: "post-task-center",
+                        prompt: postTaskPrompt
+                    }
+                ]
+            },
+            // 本番
+            {
+                timeline: mainTimeline,
+                randomize_order: true, // 動いてない
+                repetitions: 1
+            },
+            // 終了後メッセージ
+            {
+                timeline: [
+                    {
+                        type: "external-html",
+                        url: "../finished.html",
+                        cont_btn: "next-button"
+                    }
+                ]
+            },
+        ];
+
+
+
+        jsPsych.init({
+            timeline: timelines,
+            on_finish: function () {
+                ServerLink.save(jsPsych.data.get(), "fittss-law",(results)=>{
+                    location.href="../index.html"
+                });
+                //jsPsych.data.displayData();
+            },
+
+            default_iti: 0
+        });
+    });
+
+</script>
+
+</html>
