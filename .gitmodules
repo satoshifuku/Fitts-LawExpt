@@ -1,0 +1,6 @@
+[submodule "public/Chartjs"]
+	path = public/Chartjs
+	url = https://github.com/chartjs/Chart.js.git
+[submodule "public/jsPsych"]
+	path = public/jsPsych
+	url = https://github.com/jspsych/jsPsych.git
