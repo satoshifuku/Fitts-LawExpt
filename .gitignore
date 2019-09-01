@@ -1,0 +1,6 @@
+.firebase/
+.firebaserc
+.firebaserc_
+
+public/config.json
+*.log
