@@ -1,0 +1,78 @@
+<html>
+<head>
+    <link rel="stylesheet" href="../lib/bootstrap-4.3.1-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../lib/Chart.min.css" />
+</head>
+<body>
+<div class="container" >
+    <div class="row">
+        <div class="col-12" >
+            <h1>
+                Results of "Fitts's law experiment" <br />
+                「フィッツの法則の実験」の結果
+            </h1>
+
+            <div>
+                <p>
+                    フィッツの法則とは、マウスポインターをある対象まで移動したり、離れたところにあるボタンを押したりするタスクで、対象の大きさと対象までの距離、及び移動にかかる時間に以下のような関係が成り立つという法則です。
+                    <br />
+                    Fitts's is a law that the following relationship holds between the size of the object, the distance to the object, and the time it takes to move in the task of moving the mouse pointer to a certain object or pressing a remote button.
+                </p>
+
+                <img style="width: 100px;" src="./figs/law.png" />
+                <p>
+                    Tは反応時間、Dは対象までの距離、Wは対象の幅(大きさ)を表します。また、aとbはタスクの種類に依存した定数です。
+                    <br />
+                    <span style="font-style:italic;">T</span> is response time, <span style="font-style:italic;">D</span> is the distance to the target, and <span style="font-style:italic;">W</span> is the width (size) of the target. 
+                    Also, <span style="font-style:italic;">a</span> and <span style="font-style:italic;">b</span> are constants depending on the type of task.
+                </p>
+                <p>
+                    下のデータはフィッツの法則に従っていますか？
+                    <br />
+                    Does the data below follow Fitts's law?
+
+                </p>
+            </div>
+
+            <div  class="mt-5 mb-5" id="results" >
+
+            </div >
+            <a href="../index.html" id="next-button" class="btn btn-primary">トップへ戻る/Go back to the top</a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" >
+    document.addEventListener("DOMContentLoaded", () => {
+        SV3.run("fittss-law", [{
+           type: "scatter",
+           x: "distance",
+           y: "rt",
+           x_label: "距離/Distance",
+           y_label: "反応時間/Response time",
+           title: "反応時間と距離の関係/Relation between responce time and distance",
+           skip: ["post-task-center", "trial-task-center"]
+        },
+        {
+           type: "scatter",
+           x: "width",
+           y: "rt",
+           x_label: "幅/Width",
+           y_label: "反応時間/Response time",
+           title: "反応時間と幅の関係/Relation between responce time and width",
+           skip: ["post-task-center", "trial-task-center"]
+        }]);
+    });
+</script>
+
+<!-- Firebase settings  -->
+<script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.3.1//firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.3.1//firebase-firestore.js"></script>
+
+<!-- chart and styles  -->
+<script src="../lib/jquery-3.4.1.min.js"></script>
+<script src="../lib/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+<script src="../lib/Chart.min.js"></script>
+<script src="../lib/statistics-viewer3.js"></script>
+</body>
+</html>
