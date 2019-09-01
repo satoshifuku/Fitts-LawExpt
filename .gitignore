@@ -1,6 +1,7 @@
 .firebase/
 .firebaserc
 .firebaserc_
+firestore.rules
 
 public/config.json
 *.log
